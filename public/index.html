@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Lazy: bot web multiuso, sem IA, com comandos, notas, tarefas e painel.">
+  <title>Lazy</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-cor="roxo">
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="marca">
+        <span class="marca-letra" id="marca-letra">N</span>
+        <span class="marca-nome" id="nome-bot">Nexus</span>
+      </div>
+
+      <nav class="menu" aria-label="Menu principal">
+        <a class="item-menu" href="#painel" data-rota="painel"><span class="icone" aria-hidden="true">📊</span>Painel</a>
+        <a class="item-menu" href="#chat" data-rota="chat"><span class="icone" aria-hidden="true">💬</span>Chat</a>
+        <a class="item-menu" href="#notas" data-rota="notas"><span class="icone" aria-hidden="true">📝</span>Notas</a>
+        <a class="item-menu" href="#tarefas" data-rota="tarefas"><span class="icone" aria-hidden="true">✅</span>Tarefas</a>
+        <a class="item-menu" href="#historico" data-rota="historico"><span class="icone" aria-hidden="true">🕘</span>Histórico</a>
+        <a class="item-menu" href="#configuracoes" data-rota="configuracoes"><span class="icone" aria-hidden="true">⚙️</span>Configurações</a>
+        <a class="item-menu" href="#perfil" data-rota="perfil"><span class="icone" aria-hidden="true">👤</span>Perfil</a>
+      </nav>
+
+      <p class="rodape-menu">Lazy · v1.0.0</p>
+    </aside>
+
+    <div class="principal">
+      <header class="topo">
+        <button class="btn-menu" id="btn-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+        <h1 id="titulo-pagina">Painel</h1>
+      </header>
+
+      <main>
+        <!-- Painel -->
+        <section class="pagina" id="pagina-painel" hidden>
+          <p class="subtitulo" id="uptime">Carregando...</p>
+
+          <div class="cards">
+            <article class="card-estatistica">
+              <span class="rotulo">Execuções</span>
+              <strong class="valor" id="est-execucoes">0</strong>
+            </article>
+            <article class="card-estatistica">
+              <span class="rotulo">Hoje</span>
+              <strong class="valor" id="est-hoje">0</strong>
+            </article>
+            <article class="card-estatistica">
+              <span class="rotulo">Erros</span>
+              <strong class="valor" id="est-erros">0</strong>
+            </article>
+            <article class="card-estatistica">
+              <span class="rotulo">Comandos</span>
+              <strong class="valor" id="est-comandos">0</strong>
+            </article>
+            <article class="card-estatistica">
+              <span class="rotulo">Notas</span>
+              <strong class="valor" id="est-notas">0</strong>
+            </article>
+            <article class="card-estatistica">
+              <span class="rotulo">Tarefas pendentes</span>
+              <strong class="valor" id="est-pendentes">0</strong>
+            </article>
+          </div>
+
+          <section class="bloco">
+            <h2>Atalhos</h2>
+            <div class="atalhos">
+              <button class="btn btn-secundario" type="button" data-atalho="/hora">🕒 Ver hora</button>
+              <button class="btn btn-secundario" type="button" data-atalho="/sistema">🖥️ Status do sistema</button>
+              <button class="btn btn-secundario" type="button" data-atalho="/sorteio moeda">🪙 Jogar moeda</button>
+              <button class="btn btn-secundario" type="button" data-atalho="/senha">🔐 Gerar senha</button>
+              <button class="btn btn-secundario" type="button" data-atalho="/ajuda">📖 Ver comandos</button>
+            </div>
+          </section>
+
+          <div class="duas-colunas">
+            <section class="bloco">
+              <h2>Comandos mais usados</h2>
+              <ul class="lista-ranking" id="top-comandos"></ul>
+            </section>
+            <section class="bloco">
+              <h2>Últimas atividades</h2>
+              <ul class="lista-atividades" id="lista-atividades"></ul>
+            </section>
+          </div>
+        </section>
+
+        <!-- Chat -->
+        <section class="pagina" id="pagina-chat" hidden>
+          <div class="chat">
+            <div class="mensagens" id="mensagens" role="log" aria-live="polite"></div>
+            <div class="sugestoes" id="sugestoes" aria-label="Sugestões de comandos"></div>
+            <form class="entrada-chat" id="form-chat" autocomplete="off">
+              <input class="campo" id="entrada" type="text" maxlength="1000" placeholder="Digite um comando, ex.: /ajuda" aria-label="Comando">
+              <button class="btn" id="btn-enviar" type="submit">Enviar</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Notas -->
+        <section class="pagina" id="pagina-notas" hidden>
+          <p class="subtitulo" id="resumo-notas">Carregando...</p>
+          <form class="formulario" id="form-nota">
+            <label class="campo-rotulado" for="nota-conteudo">
+              Nova nota
+              <textarea class="campo" id="nota-conteudo" rows="3" maxlength="2000" placeholder="Uma ideia, um lembrete, um trecho..."></textarea>
+            </label>
+            <div class="linha-direita">
+              <span class="contador">Até 2000 caracteres</span>
+              <button class="btn" type="submit">Salvar nota</button>
+            </div>
+          </form>
+          <div class="grade-notas" id="grade-notas"></div>
+        </section>
+
+        <!-- Tarefas -->
+        <section class="pagina" id="pagina-tarefas" hidden>
+          <p class="subtitulo" id="resumo-tarefas">Carregando...</p>
+          <form class="formulario linha" id="form-tarefa">
+            <input class="campo" id="tarefa-texto" type="text" maxlength="200" placeholder="Nova tarefa..." aria-label="Texto da tarefa" required>
+            <select class="campo campo-curto" id="tarefa-prioridade" aria-label="Prioridade">
+              <option value="baixa">Baixa</option>
+              <option value="media" selected>Média</option>
+              <option value="alta">Alta</option>
+            </select>
+            <button class="btn" type="submit">Adicionar</button>
+          </form>
+          <ul class="lista" id="lista-tarefas"></ul>
+        </section>
+
+        <!-- Histórico -->
+        <section class="pagina" id="pagina-historico" hidden>
+          <div class="cabecalho-acoes">
+            <p class="subtitulo">Últimos comandos executados no chat.</p>
+            <button class="btn btn-perigo" id="btn-limpar-historico" type="button">Limpar histórico</button>
+          </div>
+          <div class="tabela-wrap">
+            <table>
+              <thead>
+                <tr><th>Data</th><th>Entrada</th><th>Resposta</th><th>Status</th></tr>
+              </thead>
+              <tbody id="corpo-historico"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Configurações -->
+        <section class="pagina" id="pagina-configuracoes" hidden>
+          <form class="formulario" id="form-config">
+            <label class="campo-rotulado" for="cfg-nome">
+              Nome do bot
+              <input class="campo" id="cfg-nome" type="text" maxlength="30" required>
+            </label>
+
+            <fieldset class="campo-grupo">
+              <legend>Cor de destaque</legend>
+              <div class="cores">
+                <label class="swatch" data-cor="roxo">
+                  <input type="radio" name="cor" value="roxo">
+                  <span class="swatch-bola"></span>
+                  <span>Roxo</span>
+                </label>
+                <label class="swatch" data-cor="azul">
+                  <input type="radio" name="cor" value="azul">
+                  <span class="swatch-bola"></span>
+                  <span>Azul</span>
+                </label>
+                <label class="swatch" data-cor="verde">
+                  <input type="radio" name="cor" value="verde">
+                  <span class="swatch-bola"></span>
+                  <span>Verde</span>
+                </label>
+                <label class="swatch" data-cor="rosa">
+                  <input type="radio" name="cor" value="rosa">
+                  <span class="swatch-bola"></span>
+                  <span>Rosa</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <label class="interruptor">
+              <input type="checkbox" id="cfg-mostrar-hora">
+              <span class="trilho"><span class="bolinha"></span></span>
+              <span>Mostrar horário nas mensagens do chat</span>
+            </label>
+
+            <label class="interruptor">
+              <input type="checkbox" id="cfg-animacoes">
+              <span class="trilho"><span class="bolinha"></span></span>
+              <span>Animações</span>
+            </label>
+
+            <div class="linha-direita">
+              <span class="contador">As alterações valem ao salvar.</span>
+              <button class="btn" type="submit">Salvar configurações</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Perfil -->
+        <section class="pagina" id="pagina-perfil" hidden>
+          <div class="perfil-topo">
+            <div class="avatar" id="avatar-inicial" aria-hidden="true">U</div>
+            <div>
+              <h2 id="perfil-nome-exibicao">Usuário</h2>
+              <p class="subtitulo" id="perfil-cargo-exibicao">Sem cargo definido</p>
+            </div>
+          </div>
+          <form class="formulario" id="form-perfil">
+            <div class="grade-campos">
+              <label class="campo-rotulado" for="perfil-nome">
+                Nome
+                <input class="campo" id="perfil-nome" type="text" maxlength="60" required>
+              </label>
+              <label class="campo-rotulado" for="perfil-cargo">
+                Cargo
+                <input class="campo" id="perfil-cargo" type="text" maxlength="60">
+              </label>
+              <label class="campo-rotulado" for="perfil-email">
+                E-mail
+                <input class="campo" id="perfil-email" type="email" maxlength="120">
+              </label>
+            </div>
+            <label class="campo-rotulado" for="perfil-bio">
+              Bio
+              <textarea class="campo" id="perfil-bio" rows="3" maxlength="300"></textarea>
+            </label>
+            <div class="linha-direita">
+              <span class="contador">Até 300 caracteres na bio.</span>
+              <button class="btn" type="submit">Salvar perfil</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="sombra-menu" id="sombra-menu"></div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
