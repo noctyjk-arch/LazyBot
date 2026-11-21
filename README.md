@@ -1,59 +1,50 @@
-# Lazy · Bot web multiuso
+# Lazy
 
-Painel estilo SaaS (dark mode com detalhes roxos) com chat de comandos, notas, tarefas, histórico e perfil. Não usa IA nem serviços externos: todas as respostas são código deste projeto. Zero dependências: só Node.js.
+Bot web multiuso, **sem IA**: comandos, notas, tarefas e um painel. Usa só Node.js e módulos nativos, sem dependências externas.
 
-## Estrutura
+## Comandos
+
+Digite no chat com ou sem a barra: `/ajuda`, `/hora`, `/calc`, `/converter`, `/cor`, `/base64`, `/texto`, `/senha`, `/uuid`, `/sorteio`, `/sistema`, `/nota`, `/tarefa`.
+
+## Rodar localmente
+
+Você precisa do Node.js 18 ou superior. Não há nada para instalar.
+
+```bash
+npm start
 ```
-index.js             ponto de entrada (Main File na Enzonic)
-server.js            servidor HTTP nativo
-src/config.js        configurações e leitura do .env
-src/armazenamento.js dados em data/db.json (gravação atômica)
-src/http.js          JSON, arquivos estáticos, cabeçalhos de segurança e senha
-src/rotas.js         API REST (/api/*)
-src/comandos/        um arquivo por comando (carregado automaticamente)
-public/              site: HTML (estrutura), CSS (aparência) e JS (interações)
-```
 
-## 1. Rodar no seu computador
-1. Instale o [Node.js](https://nodejs.org) 18 ou superior.
-2. Entre na pasta do projeto e rode `npm start`.
-3. Abra http://localhost:3000
+Depois abra http://localhost:3000 no navegador.
 
-Para mudar a porta: `PORT=8080 npm start` (ou crie um arquivo `.env`, veja `.env.example`).
+- Sem `SENHA_ACESSO`, o acesso é livre e um aviso aparece no terminal.
+- Para pedir login, copie `.env.example` para `.env` e defina `SENHA_ACESSO` (e, se quiser, `USUARIO_ACESSO`).
+- Os dados ficam em `data/db.json`, criado automaticamente.
 
-## 2. Guardar no GitHub
-```
+## Subir no GitHub
+
+Envie todos os arquivos mantendo a estrutura de pastas. `src/`, `src/comandos/` e `public/` precisam continuar como estão.
+
+```bash
 git init
 git add .
-git commit -m "Nexus bot web"
+git commit -m "Lazy: primeira versão"
 git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/nexus-bot.git
+git remote add origin https://github.com/SEU-USUARIO/lazy.git
 git push -u origin main
 ```
-O `.gitignore` já deixa de fora `node_modules/`, `data/` e `.env`, então senhas e dados não vão para o repositório.
 
-## 3. Hospedar na Enzonic
-1. No painel da Enzonic, crie um serviço do tipo **Node.js** e conecte o repositório do GitHub (ou envie os arquivos pelo gerenciador de arquivos).
-2. Comando de inicialização: `npm start`.
-3. A porta é recebida pela variável `PORT` ou `SERVER_PORT` (o projeto já lê as duas).
-4. Em **Variáveis de ambiente**, defina `SENHA_ACESSO` (e opcionalmente `USUARIO_ACESSO`) para proteger o painel.
-5. Confira o limite de memória do seu plano no painel. O projeto usa pouca memória.
+O `.gitignore` já deixa de fora `node_modules/`, `data/`, `.env` e logs. Nunca envie o seu `.env` real.
 
-## Adicionando um comando
-Crie um arquivo em `src/comandos/`, por exemplo `oi.js`:
+## Hospedar na Enzonic
 
-```js
-'use strict';
-module.exports = {
-  nome: 'oi',                      // usado no chat: /oi
-  apelidos: ['ola'],               // nomes alternativos (opcional)
-  categoria: 'Diversão',
-  descricao: 'Cumprimenta você',
-  uso: '/oi [nome]',
-  executar: ([nome = 'visitante'], ctx) => `Olá, ${nome}!`,  // pode devolver texto ou Promise
-};
-```
-Reinicie o servidor. O comando aparece no chat e em `/ajuda` sozinho. Use `secreto: true` se a resposta não deve ir para o histórico (como em `/senha`).
+1. Crie a aplicação na Enzonic apontando para o repositório do GitHub (ou envie o projeto).
+2. Em **Main File**, use `index.js`.
+3. Configure as variáveis de ambiente:
+   - `SENHA_ACESSO`: senha do login (recomendada).
+   - `USUARIO_ACESSO`: usuário do login (padrão `admin`).
+4. A porta vem da própria hospedagem (variável `PORT`), então não é preciso configurar.
 
-## Comandos incluídos
-`/ajuda`, `/hora`, `/calc`, `/converter`, `/cor`, `/base64`, `/texto`, `/senha`, `/uuid`, `/sorteio`, `/sistema`, `/nota`, `/tarefa`.
+Observações:
+
+- `/hora` e `/sistema` usam o fuso horário do servidor, que pode ser UTC.
+- Se a hospedagem não mantiver o disco entre reinícios, os dados de `data/db.json` podem se perder.
