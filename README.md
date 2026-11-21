@@ -1,4 +1,4 @@
-# Nexus · Bot web multiuso
+# Lazy · Bot web multiuso
 
 Painel estilo SaaS (dark mode com detalhes roxos) com chat de comandos, notas, tarefas, histórico e perfil. Não usa IA nem serviços externos: todas as respostas são código deste projeto. Zero dependências: só Node.js.
 
